@@ -1,4 +1,6 @@
 /* Fraction.java */
+/* Alicia Sheng */
+/* 6/3/2020 */
 
 import java.io.*;
 
