@@ -1,4 +1,8 @@
-/* SibTreeNode.java */
+/* 
+ * SibTreeNode.java
+ * Alicia Sheng
+ * 6/24/2020
+ */
 
 package tree;
 
@@ -74,7 +78,15 @@ class SibTreeNode extends TreeNode {
 	 * root.
 	 */
 	public TreeNode parent() throws InvalidNodeException {
-		return null;
+		if (isValidNode()) {
+			if (parent == null) {
+				return new SibTreeNode();
+			} else {
+				return parent;
+			}
+		} else {
+			throw new InvalidNodeException();
+		}
 	}
 
 	/**
@@ -125,7 +137,27 @@ class SibTreeNode extends TreeNode {
 	 * inserted as the last child. If c < 1, act as if c is 1.
 	 */
 	public void insertChild(Object item, int c) throws InvalidNodeException {
-		// FILL IN YOUR SOLUTION TO PART II HERE.
+		if (isValidNode()) {
+			if (c <= 1 || firstChild == null) {
+				SibTreeNode first = firstChild;
+				firstChild = new SibTreeNode(myTree, item);
+				firstChild.nextSibling = first;
+				firstChild.parent = this;
+			} else {
+				SibTreeNode kid = firstChild;
+				while ((kid.nextSibling != null) && ((c - 1) > 1)) {
+					kid = kid.nextSibling;
+					c--;
+				}
+				SibTreeNode now = kid.nextSibling;
+				kid.nextSibling = new SibTreeNode(myTree, item);
+				kid.nextSibling.nextSibling = now;
+				kid.nextSibling.parent = this;
+			}
+			myTree.size++;
+		} else {
+			throw new InvalidNodeException();
+		}
 	}
 
 	/**
@@ -135,7 +167,24 @@ class SibTreeNode extends TreeNode {
 	 * siblings are all shifted left by one.
 	 */
 	public void removeLeaf() throws InvalidNodeException {
-		// FILL IN YOUR SOLUTION TO PART III HERE.
+		if (isValidNode()) {
+			if (firstChild == null) {
+				if (parent != null && parent.firstChild.equals(this)) {
+					parent.firstChild = nextSibling;
+				} else if (parent != null) {
+					SibTreeNode node = parent.firstChild;
+					while (!node.nextSibling.equals(this)) {
+						node = node.nextSibling;
+					}
+					node.nextSibling = null;
+				}
+				myTree.size--;
+				valid = false;
+				this.item = null;
+			}
+		} else {
+			throw new InvalidNodeException();
+		}
 	}
 
 }
